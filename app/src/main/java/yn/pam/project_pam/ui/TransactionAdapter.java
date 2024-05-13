@@ -32,8 +32,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public void setData(List<Transaction> transactions) {
-        this.transactions = transactions; // Atur data transaksi baru
-        notifyDataSetChanged(); // Pemberitahuan kepada adapter bahwa data telah berubah
+        this.transactions = transactions;
+        notifyDataSetChanged();
     }
 
     @NonNull
