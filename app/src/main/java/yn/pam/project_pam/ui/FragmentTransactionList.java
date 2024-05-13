@@ -48,8 +48,6 @@ public class FragmentTransactionList extends Fragment {
                 transactionAdapter.setData(transactions);
             }
         });
-
         return view;
     }
-
 }
