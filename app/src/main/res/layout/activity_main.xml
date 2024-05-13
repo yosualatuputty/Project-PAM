@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#27962C"
-    tools:context=".MainActivity">
+    android:background="#27962C">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_transactionHistory"
@@ -338,8 +337,8 @@
         android:id="@+id/iv_calendar"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/v_backgroundWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/calendar" />

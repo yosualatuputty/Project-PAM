@@ -7,30 +7,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import yn.pam.project_pam.R;
+
+import yn.pam.project_pam.*;
 import yn.pam.project_pam.db.Transaction;
+import yn.pam.project_pam.repository.TransactionRepository;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 
-    private List<Transaction> transactions;
+    private List<Transaction> transactions; // Ganti tipe LiveData menjadi List<Transaction>
     private Context context;
     private DecimalFormat decimalFormat;
 
-    public TransactionAdapter(Context context, List<Transaction> transactions) {
+    public TransactionAdapter(Context context) {
         this.context = context;
-        this.transactions = transactions;
+        this.transactions = new ArrayList<>(); // Inisialisasi list kosong
         this.decimalFormat = new DecimalFormat("Rp ###,###");
+    }
+
+    public void setData(List<Transaction> transactions) {
+        this.transactions = transactions; // Atur data transaksi baru
+        notifyDataSetChanged(); // Pemberitahuan kepada adapter bahwa data telah berubah
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_rv_analytics, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_rv_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,7 +53,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AnalyticsActivity) context).deleteTransaction(transaction);
+                TransactionRepository transactionRepository = new TransactionRepository(context);
+                transactionRepository.delete(transaction);
             }
         });
 
@@ -61,11 +71,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public int getItemCount() {
         return transactions.size();
-    }
-
-    public void setData(List<Transaction> transactions) {
-        this.transactions = transactions;
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
