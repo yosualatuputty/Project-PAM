@@ -38,10 +38,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         database = AppDatabase.getInstance(this);
         items.clear();
         items.addAll(database.transaksiDao().getAll());
-        RecyclerView recyclerView = findViewById(R.id.rv_transactionList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, items);
-        recyclerView.setAdapter(adapter);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new TransactionFragment())
+                .commit();
+
+//        RecyclerView recyclerView = findViewById(R.id.rv_transactionList);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        adapter = new Adapter(this, items);
+//        recyclerView.setAdapter(adapter);
 
 //        items.add(new Item("Food", "Bakso", "-Rp 25.000", "Cash"));
 
@@ -62,14 +67,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        items.clear();
-        items.addAll(database.transaksiDao().getAll());
-        adapter.notifyDataSetChanged();
+//        items.clear();
+//        items.addAll(database.transaksiDao().getAll());
+//        adapter.notifyDataSetChanged();
     }
 
     @Override

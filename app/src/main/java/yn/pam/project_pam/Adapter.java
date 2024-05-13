@@ -27,11 +27,13 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     Context context;
     List<Transaksi> items;
+    EditClickListener editClickListener;
 
 
-    public Adapter(Context context, List<Transaksi> items) {
+    public Adapter(Context context, List<Transaksi> items, EditClickListener listener) {
         this.context = context;
         this.items = items;
+        this.editClickListener = listener;
     }
 
     @NonNull
@@ -65,6 +67,9 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         return items.size();
     }
 
+    public interface EditClickListener {
+        void onEditClicked(int transactionId);
+    }
 
 
     private void showDialog(Context context, Transaksi item) {
@@ -86,10 +91,14 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         bt_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, EditActivity.class);
+//                int id = item.tid;
+//                Intent i = new Intent(context, EditActivity.class);
+//                i.putExtra("id", id);
+//                context.startActivity(i);
                 int id = item.tid;
-                i.putExtra("id", id);
-                context.startActivity(i);
+                editClickListener.onEditClicked(id);
+                dialog.dismiss();
+
             }
         });
 
@@ -104,6 +113,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
             @Override
             public void onClick(View v) {
                 AppDatabase.getInstance(context).transaksiDao().delete(item);
+                notifyDataSetChanged();
                 dialog.dismiss();
 
             }
