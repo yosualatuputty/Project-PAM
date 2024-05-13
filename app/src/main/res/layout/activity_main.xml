@@ -84,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_All"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                     app:iconPadding="8dp"
                     app:strokeWidth="0dp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_Food"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                     app:strokeColor="#27952C"
                     app:strokeWidth="2dp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_Transport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                     app:strokeColor="#27952C"
                     app:strokeWidth="2dp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_Pet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                     app:strokeColor="#27952C"
                     app:strokeWidth="2dp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_Daily"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -163,50 +163,50 @@
 
         <View
             android:id="@+id/v_bottomNav"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_width="320dp"
+            android:layout_height="50dp"
             android:background="@drawable/bottom_nav"
             android:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/rv_transactionList" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_homeNav"
-            android:layout_width="90dp"
-            android:layout_height="32dp"
+            android:layout_width="85dp"
+            android:layout_height="30dp"
             android:layout_marginStart="32dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/frame_169"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_walletNav"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/frame_166"
             app:layout_constraintBottom_toBottomOf="@+id/v_bottomNav"
             app:layout_constraintStart_toEndOf="@+id/bt_homeNav" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_statNav"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/frame_162"
             app:layout_constraintBottom_toBottomOf="@+id/v_bottomNav"
             app:layout_constraintStart_toEndOf="@+id/bt_walletNav" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_profileNav"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bt_statNav" />
@@ -216,7 +216,7 @@
     <View
         android:id="@+id/v_backgroundWhite"
         android:layout_width="0dp"
-        android:layout_height="650dp"
+        android:layout_height="666dp"
         android:background="@drawable/bg_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -254,6 +254,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="24dp"
+            android:fontFamily="@font/roboto"
             android:text="Monthly Balance"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/iv_logoMascot"

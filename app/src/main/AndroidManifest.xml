@@ -12,12 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectPAM"
         tools:targetApi="31">
+        <activity android:name=".ui.DataNew"/>
+        <activity android:name=".ui.AnalyticsActivity"/>
+        <activity android:name=".ui.UpdateDataActivity"/>
         <activity
-            android:name=".EditActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,8 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
 
     </application>
+
+    <meta-data
+        android:name="com.github.mikephil.charting.components.Legend"
+        android:value="MarkerView,LineChart,BarChart,PieChart,ScatterChart,CandleStickChart"/>
 
 </manifest>
