@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/whiteBG" /> <!-- Background color of the dropdown -->
+    <corners android:radius="14sp" /> <!-- Radius of the corners (adjust as needed) -->
+    <stroke
+        android:width="1.5sp"
+        android:color="@color/stroke" /> <!-- Border color and width (optional) -->
+</shape>
