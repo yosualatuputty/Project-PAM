@@ -1,4 +1,4 @@
-package yn.pam.project_pam.ui;
+package yn.pam.project_pam.ui.home;
 
 import android.os.Bundle;
 

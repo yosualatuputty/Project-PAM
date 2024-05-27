@@ -1,4 +1,4 @@
-package yn.pam.project_pam.ui;
+package yn.pam.project_pam.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,24 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.db.Transaction;
-import yn.pam.project_pam.repository.TransactionRepository;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import yn.pam.project_pam.R;
+import yn.pam.project_pam.db.Transaction;
 
 public class FragmentPieChart extends Fragment {
 
-    private TransactionRepository transactionRepository;
+    private DatabaseReference transactionsRef;
 
     public FragmentPieChart() {
         // Required empty public constructor
@@ -34,17 +41,39 @@ public class FragmentPieChart extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pie_chart, container, false);
 
-        transactionRepository = new TransactionRepository(requireContext().getApplicationContext());
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            // User not logged in
+            Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+            return view;
+        }
+        String userId = currentUser.getUid();
+        transactionsRef = database.getReference("transactions").child(userId);
 
-        transactionRepository.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
-            displayPieChart(transactions, view);
+        transactionsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Transaction> transactions = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Transaction transaction = snapshot.getValue(Transaction.class);
+                    if (transaction != null) {
+                        transactions.add(transaction);
+                    }
+                }
+                displayPieChart(transactions, view);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Failed to load transactions", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
     }
 
     private void displayPieChart(List<Transaction> transactions, View view) {
-
         PieChart pieChart = view.findViewById(R.id.piechart);
         pieChart.setUsePercentValues(false);
         pieChart.getDescription().setEnabled(false);

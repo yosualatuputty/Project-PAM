@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <meta-data
+        android:name="com.github.mikephil.charting.components.Legend"
+        android:value="MarkerView,LineChart,BarChart,PieChart,ScatterChart,CandleStickChart" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,27 +18,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectPAM"
         tools:targetApi="31">
-        <activity android:name=".ui.DataNew"/>
-        <activity android:name=".ui.AnalyticsActivity"/>
-        <activity android:name=".ui.UpdateDataActivity"/>
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".ui.auth.Auth"
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity android:name=".ui.home.AnalyticsActivity" />
+        <activity android:name=".ui.home.UpdateDataActivity" />
+        <activity
+            android:name=".ui.home.MainActivity"
+            android:exported="false">
+        </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-
     </application>
-
-    <meta-data
-        android:name="com.github.mikephil.charting.components.Legend"
-        android:value="MarkerView,LineChart,BarChart,PieChart,ScatterChart,CandleStickChart"/>
 
 </manifest>

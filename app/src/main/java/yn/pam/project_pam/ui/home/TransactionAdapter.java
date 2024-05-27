@@ -1,4 +1,4 @@
-package yn.pam.project_pam.ui;
+package yn.pam.project_pam.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +11,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import yn.pam.project_pam.*;
-import yn.pam.project_pam.db.Transaction;
-import yn.pam.project_pam.repository.TransactionRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import yn.pam.project_pam.R;
+import yn.pam.project_pam.db.Transaction;
+
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 
-    private List<Transaction> transactions; // Ganti tipe LiveData menjadi List<Transaction>
+    private List<Transaction> transactions;
     private Context context;
     private DecimalFormat decimalFormat;
 
@@ -53,8 +56,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransactionRepository transactionRepository = new TransactionRepository(context);
-                transactionRepository.delete(transaction);
+                deleteTransaction(transaction);
             }
         });
 
@@ -62,7 +64,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateDataActivity.class);
-                intent.putExtra("transaction", transaction);
+                intent.putExtra("transactionId", transaction.getId());
+                intent.putExtra("category", transaction.getCategory());
+                intent.putExtra("description", transaction.getDescription());
+                intent.putExtra("nominal", transaction.getNominal());
                 context.startActivity(intent);
             }
         });
@@ -71,6 +76,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public int getItemCount() {
         return transactions.size();
+    }
+
+    private void deleteTransaction(Transaction transaction) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference("transactions").child(userId).child(transaction.getId());
+        transactionRef.removeValue();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

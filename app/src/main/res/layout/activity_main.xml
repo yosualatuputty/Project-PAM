@@ -337,10 +337,19 @@
         android:id="@+id/iv_calendar"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/v_backgroundWhite"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnKeluar"
         app:srcCompat="@drawable/calendar" />
+
+    <Button
+        android:id="@+id/btnKeluar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Keluar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
