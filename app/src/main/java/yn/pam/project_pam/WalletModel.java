@@ -1,6 +1,8 @@
-package yn.pam.project_pam;
+package yn.pam.project_pam.model;
 
 import java.util.ArrayList;
+
+import yn.pam.project_pam.R;
 
 public class WalletModel {
 

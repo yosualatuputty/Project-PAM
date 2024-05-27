@@ -1,4 +1,4 @@
-package yn.pam.project_pam;
+package yn.pam.project_pam.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,6 +18,12 @@ import com.google.gson.Gson;
 
 import java.util.Iterator;
 import java.util.List;
+
+import yn.pam.project_pam.activity.EditTransactionActivity;
+import yn.pam.project_pam.HomeViewHolder;
+import yn.pam.project_pam.R;
+import yn.pam.project_pam.Transaction;
+import yn.pam.project_pam.TransactionDatabase;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
 

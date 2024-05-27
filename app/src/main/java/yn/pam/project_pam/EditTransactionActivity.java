@@ -1,4 +1,4 @@
-package yn.pam.project_pam;
+package yn.pam.project_pam.activity;
 
 
 import android.content.Intent;
@@ -21,6 +21,15 @@ import androidx.room.Room;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+
+import yn.pam.project_pam.CategoryLoader;
+import yn.pam.project_pam.R;
+import yn.pam.project_pam.Transaction;
+import yn.pam.project_pam.TransactionDatabase;
+import yn.pam.project_pam.adapter.CategoryAdapter;
+import yn.pam.project_pam.adapter.WalletAdapter;
+import yn.pam.project_pam.model.CategoryModel;
+import yn.pam.project_pam.model.WalletModel;
 
 public class EditTransactionActivity extends AppCompatActivity {
 

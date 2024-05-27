@@ -1,4 +1,4 @@
-package yn.pam.project_pam;
+package yn.pam.project_pam.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import yn.pam.project_pam.R;
+import yn.pam.project_pam.model.WalletModel;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> {
 
