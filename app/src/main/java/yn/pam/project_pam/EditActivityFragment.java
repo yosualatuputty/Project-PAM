@@ -11,9 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import yn.pam.project_pam.database.AppDatabase;
 import yn.pam.project_pam.database.entity.Transaksi;
@@ -23,14 +30,19 @@ public class EditActivityFragment extends Fragment {
     Button continueButton;
     private AppDatabase database;
 
-    String kategori, deskripsi, nominal, sumber;
+    String kategori, deskripsi, nominal, sumber, id;
 
-    int id;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase firebaseDatabase;
 
-    public static EditActivityFragment newInstance(int transactionId) {
+    public static EditActivityFragment newInstance(String transactionId, String kategori, String deskripsi, String nominal, String sumber) {
         EditActivityFragment fragment = new EditActivityFragment();
         Bundle args = new Bundle();
-        args.putInt("Id", transactionId);
+        args.putString("id", transactionId);
+        args.putString("kategori", kategori);
+        args.putString("deskripsi", deskripsi);
+        args.putString("nominal", nominal);
+        args.putString("sumber", sumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,11 +51,19 @@ public class EditActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_layout, container, false);
         // Initialize views and handle editing
-        database = AppDatabase.getInstance(getContext());
+//        database = AppDatabase.getInstance(getContext());
+
         if (getArguments() != null) {
-            id = getArguments().getInt("Id", 0);
+            id = getArguments().getString("id", "");
+            kategori = getArguments().getString("kategori", "");
+            deskripsi = getArguments().getString("deskripsi", "");
+            nominal = getArguments().getString("nominal", "");
+            sumber = getArguments().getString("sumber", "");
+
         }
-        Transaksi transaksi = database.transaksiDao().get(id);
+//        Transaksi transaksi = database.transaksiDao().get(id);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
 
         closeButton = view.findViewById(R.id.closeButton_edit);
         continueButton = view.findViewById(R.id.bt_continueEdit);
@@ -62,18 +82,18 @@ public class EditActivityFragment extends Fragment {
 
         spinner_cat.setAdapter(adapter);
         spinner_wall.setAdapter(adapter2);
-        amount.setText(transaksi.nominal);
-        desc.setText(transaksi.deskripsi);
+        amount.setText(nominal);
+        desc.setText(deskripsi);
 
         for (int i = 0; i < adapter.getCount(); i++) {
-            if (adapter.getItem(i).equals(transaksi.kategori)) {
+            if (adapter.getItem(i).equals(kategori)) {
                 spinner_cat.setSelection(i);
                 break;
             }
         }
 
         for (int i = 0; i < adapter2.getCount(); i++) {
-            if (adapter2.getItem(i).equals(transaksi.sumber)) {
+            if (adapter2.getItem(i).equals(sumber)) {
                 spinner_wall.setSelection(i);
                 break;
             }
@@ -85,8 +105,13 @@ public class EditActivityFragment extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                database.transaksiDao().updateAll(spinner_cat.getSelectedItem().toString(), desc.getText().toString(),
-                        amount.getText().toString(), spinner_wall.getSelectedItem().toString(), transaksi.tid );
+//                database.transaksiDao().updateAll(spinner_cat.getSelectedItem().toString(), desc.getText().toString(),
+//                        amount.getText().toString(), spinner_wall.getSelectedItem().toString(), transaksi.tid );
+
+                Transaction updatedTransaction= new Transaction(spinner_cat.getSelectedItem().toString(), desc.getText().toString(),
+                        amount.getText().toString(), spinner_wall.getSelectedItem().toString());
+
+                updateData(id, updatedTransaction);
 
                 FragmentManager fragmentManager = getParentFragmentManager();
                 fragmentManager.beginTransaction()
@@ -111,5 +136,22 @@ public class EditActivityFragment extends Fragment {
         return view;
 
 
+    }
+
+    private void updateData(String transactionId, Transaction updatedTransaction) {
+        DatabaseReference noteRef = databaseReference.child("transaction").child(transactionId);
+        noteRef.setValue(updatedTransaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getContext(), "Transaction updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Failed to update transaction", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

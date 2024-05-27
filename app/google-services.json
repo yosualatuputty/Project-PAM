@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1089519778777",
+    "firebase_url": "https://fundplus-4725e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fundplus-4725e",
+    "storage_bucket": "fundplus-4725e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089519778777:android:9a220f199035917746f7c8",
+        "android_client_info": {
+          "package_name": "yn.pam.project_pam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPHiyjAmy8EA781-FL3-KNNwatRJ9lQBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

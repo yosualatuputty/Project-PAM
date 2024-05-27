@@ -22,7 +22,7 @@ import yn.pam.project_pam.database.AppDatabase;
 import yn.pam.project_pam.database.entity.Transaksi;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{
 
     private Adapter adapter;
 
@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        database = AppDatabase.getInstance(this);
-        items.clear();
-        items.addAll(database.transaksiDao().getAll());
+//        database = AppDatabase.getInstance(this);
+//        items.clear();
+//        items.addAll(database.transaksiDao().getAll());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new TransactionFragment())
@@ -52,18 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        fetchData("");
 
-        foodButton = findViewById(R.id.bt_Food);
-        foodButton.setOnClickListener(this);
-        allButton = findViewById(R.id.bt_All);
-        allButton.setOnClickListener(this);
-        transButton = findViewById(R.id.bt_Transport);
-        transButton.setOnClickListener(this);
-        petButton = findViewById(R.id.bt_Pet);
-        petButton.setOnClickListener(this);
-        dailyButton = findViewById(R.id.bt_Daily);
-        dailyButton.setOnClickListener(this);
+//        foodButton = findViewById(R.id.bt_Food);
+//        foodButton.setOnClickListener(this);
+//        allButton = findViewById(R.id.bt_All);
+//        allButton.setOnClickListener(this);
+//        transButton = findViewById(R.id.bt_Transport);
+//        transButton.setOnClickListener(this);
+//        petButton = findViewById(R.id.bt_Pet);
+//        petButton.setOnClickListener(this);
+//        dailyButton = findViewById(R.id.bt_Daily);
+//        dailyButton.setOnClickListener(this);
         btTambah = findViewById(R.id.bt_tambah);
-        btTambah.setOnClickListener(this);
+//        btTambah.setOnClickListener(this);
+
+        btTambah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TambahActivity.class));
+            }
+        });
 
 
 
@@ -79,50 +86,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.bt_All) {
-            fetchData("");
-        } else if (v.getId() == R.id.bt_Food) {
-            fetchData("Food");
-        } else if (v.getId() == R.id.bt_Transport) {
-            fetchData("Transport");
-        } else if (v.getId() == R.id.bt_Pet) {
-            fetchData("Pet");
-        } else if (v.getId() == R.id.bt_Daily) {
-            fetchData("Daily");
-        } else if (v.getId() == R.id.bt_tambah) {
-            startActivity(new Intent(MainActivity.this, TambahActivity.class));
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        if(v.getId() == R.id.bt_All) {
+//            fetchData("");
+//        } else if (v.getId() == R.id.bt_Food) {
+//            fetchData("Food");
+//        } else if (v.getId() == R.id.bt_Transport) {
+//            fetchData("Transport");
+//        } else if (v.getId() == R.id.bt_Pet) {
+//            fetchData("Pet");
+//        } else if (v.getId() == R.id.bt_Daily) {
+//            fetchData("Daily");
+//        } else if (v.getId() == R.id.bt_tambah) {
+//            startActivity(new Intent(MainActivity.this, TambahActivity.class));
+//        }
+//    }
 
 
-    private void fetchData(String kategori) {
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        Call<List<Item>> call = apiService.getItems(kategori);
-        call.enqueue(new Callback<List<Item>>() {
-            @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
-                if (response.isSuccessful()) {
-                    List<Item> items = response.body();
-                    if (items != null) {
-//                        adapter.setTaskList(items);
-                    }
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
-
-                Log.d("JSON_RESPONSE", "Failure");
-                t.printStackTrace();
-            }
-        });
-
-
-    }
+//    private void fetchData(String kategori) {
+//        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+//        Call<List<Item>> call = apiService.getItems(kategori);
+//        call.enqueue(new Callback<List<Item>>() {
+//            @Override
+//            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+//                if (response.isSuccessful()) {
+//                    List<Item> items = response.body();
+//                    if (items != null) {
+////                        adapter.setTaskList(items);
+//                    }
+//                } else {
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Item>> call, Throwable t) {
+//
+//                Log.d("JSON_RESPONSE", "Failure");
+//                t.printStackTrace();
+//            }
+//        });
+//
+//
+//    }
 
 
 }
