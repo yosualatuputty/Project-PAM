@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "896724593412",
+    "firebase_url": "https://projectpamkelas-default-rtdb.firebaseio.com",
+    "project_id": "projectpamkelas",
+    "storage_bucket": "projectpamkelas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896724593412:android:96b1ebe53c4fa12c0f3e51",
+        "android_client_info": {
+          "package_name": "yn.pam.project_pam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896724593412-rn81g3782jnf9ag36cnse5kuucgbvek8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7lFU5QFETaEuv1LMsenTtWfPMnwFuYVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896724593412-rn81g3782jnf9ag36cnse5kuucgbvek8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

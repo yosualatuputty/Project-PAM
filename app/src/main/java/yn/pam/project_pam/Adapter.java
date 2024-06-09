@@ -13,8 +13,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+<<<<<<< Updated upstream
+=======
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+>>>>>>> Stashed changes
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<ViewHolder> {
@@ -22,9 +29,24 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     Context context;
     List<Item> items;
 
+<<<<<<< Updated upstream
     public Adapter(Context context, List<Item> items) {
         this.context = context;
         this.items = items;
+=======
+    DatabaseReference databaseReference;
+
+    List<String> keys;
+    DecimalFormat decimalFormat;
+
+    public Adapter(Context context, List<Transaction> items, List<String> keys, EditClickListener listener, DatabaseReference databaseReference) {
+        this.context = context;
+        this.items = items;
+        this.editClickListener = listener;
+        this.databaseReference = databaseReference;
+        this.keys = keys;
+        this.decimalFormat = new DecimalFormat("Rp ###,###");
+>>>>>>> Stashed changes
     }
 
     @NonNull
@@ -36,12 +58,21 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+<<<<<<< Updated upstream
         Item currentItem = items.get(position);
         holder.tv_kategoriList.setText(items.get(position).getKategori());
         holder.tv_deskripsiList.setText(items.get(position).getDeskripsi());
         holder.tv_nominalList.setText(items.get(position).getNominal());
         holder.tv_sumberList.setText(items.get(position).getSumber());
         holder.iv_logoList.setImageResource(items.get(position).getLogo());
+=======
+        Transaction currentItem = items.get(position);
+        holder.tv_kategoriList.setText(currentItem.getKategori());
+        holder.tv_deskripsiList.setText(currentItem.getDeskripsi());
+        holder.tv_nominalList.setText(decimalFormat.format(currentItem.getNominal()));
+        holder.tv_sumberList.setText(currentItem.getSumber());
+//        holder.iv_logoList.setImageResource(currentItem.getLogo());
+>>>>>>> Stashed changes
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +108,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         tv_walletDialog.setText(item.getSumber());
         iv_logoDialog.setImageResource(R.drawable.food);
 
+<<<<<<< Updated upstream
         Button editButton = dialog.findViewById(R.id.bt_editDialog);
         Button deleteButton = dialog.findViewById(R.id.bt_deleteDialog);
         ImageView closeButton = dialog.findViewById(R.id.closeButton_edit);
@@ -92,8 +124,34 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                     intent.putExtra("itemData", jsonItem);
 
                     context.startActivity(intent);
+=======
+        tv_kategori.setText(item.getKategori());
+        tv_nominal.setText(decimalFormat.format(item.getNominal()));
+        tv_wallet.setText(item.getSumber());
+        bt_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = key;
+                String kategori = item.getKategori();
+                String deksripsi = item.getDeskripsi();
+                String nominal = String.valueOf(item.getNominal());
+                String sumber = item.getSumber();
+//                Intent i = new Intent(context, EditActivity.class);
+//                i.putExtra("id", id);
+//                context.startActivity(i);
+//                int id = item.tid;
+                editClickListener.onEditClicked(id, kategori, deksripsi, nominal, sumber);
+>>>>>>> Stashed changes
                 dialog.dismiss();
+            }
+        });
 
+        bt_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference("transactions").child(userId).child(key);
+                transactionRef.removeValue();
             }
         });
 
