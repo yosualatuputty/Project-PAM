@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "358677948923",
+    "project_id": "fundplusapps",
+    "storage_bucket": "fundplusapps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358677948923:android:e532526325f6fc9b43835e",
+        "android_client_info": {
+          "package_name": "yn.pam.project_pam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC23wt3-YFUjsj47d6cFmtGM7-loXWhrkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

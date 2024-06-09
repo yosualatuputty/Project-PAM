@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,21 +13,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectPAM"
         tools:targetApi="31">
+<!--        <activity-->
+<!--            android:name=".EditTransactionActivity"-->
+<!--            android:exported="false">-->
+<!--        </activity>-->
         <activity
-            android:name=".EditActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".MainActivity"
+            android:name=".DisplayTransactionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity
+            android:name=".AddTransactionActivity"
+            android:label="Add Transaction">
+        </activity>
+        <activity
+            android:name=".EditTransactionActivity"
+            android:label="Edit Transaction">
+        </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

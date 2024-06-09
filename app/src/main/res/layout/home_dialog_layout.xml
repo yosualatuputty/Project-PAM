@@ -25,8 +25,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view"
-        app:srcCompat="@drawable/food"
-        tools:srcCompat="@drawable/food" />
+        app:srcCompat="@drawable/ic_food"
+        tools:srcCompat="@drawable/ic_food" />
 
     <ImageView
         android:id="@+id/closeButton_edit"
