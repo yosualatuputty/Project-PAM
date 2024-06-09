@@ -16,9 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import yn.pam.project_pam.database.AppDatabase;
@@ -34,6 +37,8 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     List<String> keys;
 
+    private DecimalFormat decimalFormat;
+
 
     public Adapter(Context context, List<Transaction> items, List<String> keys, EditClickListener listener, DatabaseReference databaseReference) {
         this.context = context;
@@ -41,6 +46,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         this.editClickListener = listener;
         this.databaseReference = databaseReference;
         this.keys = keys;
+        this.decimalFormat = new DecimalFormat("Rp ###,###");
     }
 
     @NonNull
@@ -55,7 +61,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         Transaction currentItem = items.get(position);
         holder.tv_kategoriList.setText(currentItem.getKategori());
         holder.tv_deskripsiList.setText(currentItem.getDeskripsi());
-        holder.tv_nominalList.setText(currentItem.getNominal());
+        holder.tv_nominalList.setText(decimalFormat.format(currentItem.getNominal()));
         holder.tv_sumberList.setText(currentItem.getSumber());
 //        holder.iv_logoList.setImageResource(currentItem.getLogo());
 
@@ -93,7 +99,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         tv_wallet = dialog.findViewById(R.id.tv_walletDialog);
 
         tv_kategori.setText(item.getKategori());
-        tv_nominal.setText(item.getNominal());
+        tv_nominal.setText(decimalFormat.format(item.getNominal()));
         tv_wallet.setText(item.getSumber());
         bt_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +107,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
                 String id = key;
                 String kategori = item.getKategori();
                 String deksripsi = item.getDeskripsi();
-                String nominal = item.getNominal();
+                String nominal = Double.toString(item.getNominal());
                 String sumber = item.getSumber();
 //                Intent i = new Intent(context, EditActivity.class);
 //                i.putExtra("id", id);
@@ -125,6 +131,9 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
             public void onClick(View v) {
 //                AppDatabase.getInstance(context).transaksiDao().delete(item);
 //                notifyDataSetChanged();
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference("transactions").child(userId).child(key);
+                transactionRef.removeValue();
                 dialog.dismiss();
 
             }

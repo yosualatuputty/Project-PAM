@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -109,7 +110,7 @@ public class EditActivityFragment extends Fragment {
 //                        amount.getText().toString(), spinner_wall.getSelectedItem().toString(), transaksi.tid );
 
                 Transaction updatedTransaction= new Transaction(spinner_cat.getSelectedItem().toString(), desc.getText().toString(),
-                        amount.getText().toString(), spinner_wall.getSelectedItem().toString());
+                        Double.parseDouble(amount.getText().toString()), spinner_wall.getSelectedItem().toString());
 
                 updateData(id, updatedTransaction);
 
@@ -139,8 +140,9 @@ public class EditActivityFragment extends Fragment {
     }
 
     private void updateData(String transactionId, Transaction updatedTransaction) {
-        DatabaseReference noteRef = databaseReference.child("transaction").child(transactionId);
-        noteRef.setValue(updatedTransaction)
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference("transactions").child(userId).child(transactionId);
+        transactionRef.setValue(updatedTransaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

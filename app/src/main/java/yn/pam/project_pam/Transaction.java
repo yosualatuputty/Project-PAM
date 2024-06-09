@@ -10,11 +10,11 @@ public class Transaction {
 
     private int id;
 
-    private String nominal;
+    private double nominal;
 
     private String sumber;
 
-    public Transaction(String kategori, String deskripsi, String nominal, String sumber) {
+    public Transaction(String kategori, String deskripsi, double nominal, String sumber) {
         this.kategori = kategori;
         this.deskripsi = deskripsi;
         this.nominal = nominal;
@@ -37,11 +37,11 @@ public class Transaction {
 
 
 
-    public String getNominal() {
+    public double getNominal() {
         return nominal;
     }
 
-    public void setNominal(String nominal) {
+    public void setNominal(double nominal) {
         this.nominal = nominal;
     }
 

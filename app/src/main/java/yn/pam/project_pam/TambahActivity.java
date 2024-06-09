@@ -40,7 +40,7 @@ public class TambahActivity extends AppCompatActivity {
 
     Spinner spinner_cat, spinner_wall;
 
-    DatabaseReference databaseReference;
+    DatabaseReference transactionsRef;
     FirebaseDatabase firebaseDatabase;
 
 
@@ -50,8 +50,8 @@ public class TambahActivity extends AppCompatActivity {
         setContentView(R.layout.add_layout);
 
 //        database = AppDatabase.getInstance(getApplicationContext());
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        transactionsRef = database.getReference("transactions");
         closeButton = findViewById(R.id.closeButton_add);
         continueButton = findViewById(R.id.bt_add);
 //        String jsonItem = getIntent().getStringExtra("itemData");
@@ -104,10 +104,28 @@ public class TambahActivity extends AppCompatActivity {
         if (!validateForm()){
             return;
         }
-        String nominal = amount.getText().toString();
+        double nominal;
+        try {
+            nominal = Double.parseDouble(amount.getText().toString());
+        } catch (NumberFormatException e) {
+            amount.setError("Invalid number");
+            return;
+        }
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser == null) {
+            Toast.makeText(getApplicationContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        DatabaseReference userTransactionsRef = transactionsRef.child(userId);
+        String transactionId = userTransactionsRef.push().getKey();
+
         String deskripsi = desc.getText().toString();
         Transaction baru = new Transaction(spinner_cat.getSelectedItem().toString(), deskripsi, nominal, spinner_wall.getSelectedItem().toString());
-        databaseReference.child("transaction").push().setValue(baru)
+        userTransactionsRef.child(transactionId).setValue(baru)
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

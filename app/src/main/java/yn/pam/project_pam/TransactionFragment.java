@@ -19,6 +19,7 @@ import java.util.List;
 import yn.pam.project_pam.database.AppDatabase;
 import yn.pam.project_pam.database.entity.Transaksi;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
@@ -38,7 +39,7 @@ public class TransactionFragment extends Fragment implements Adapter.EditClickLi
     private RecyclerView recyclerView;
     private Adapter adapter;
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference transactionsRef;
 
     private FirebaseDatabase firebaseDatabase;
 
@@ -48,8 +49,6 @@ public class TransactionFragment extends Fragment implements Adapter.EditClickLi
 //        database = AppDatabase.getInstance(getContext());
 //        items.clear();
 //        items.addAll(database.transaksiDao().getAll());
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        adapter = new Adapter(getContext(), items, this);
@@ -58,8 +57,11 @@ public class TransactionFragment extends Fragment implements Adapter.EditClickLi
     }
 
     private void readData() {
-        DatabaseReference notesRef = databaseReference.child("transaction");
-        notesRef.addValueEventListener(new ValueEventListener() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = currentUser.getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        transactionsRef = database.getReference("transactions").child(userId);
+        transactionsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Transaction> transactionList = new ArrayList<>();
@@ -71,7 +73,7 @@ public class TransactionFragment extends Fragment implements Adapter.EditClickLi
                     transactionList.add(transaction);
                 }
 
-                Adapter adapter = new Adapter(getContext(), transactionList, keys, TransactionFragment.this, databaseReference);
+                Adapter adapter = new Adapter(getContext(), transactionList, keys, TransactionFragment.this, transactionsRef);
 
 
                 if(transactionList.isEmpty()) {

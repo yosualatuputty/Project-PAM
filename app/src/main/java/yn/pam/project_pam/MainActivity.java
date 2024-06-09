@@ -11,6 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import yn.pam.project_pam.analytics.AnalyticsActivity;
 import yn.pam.project_pam.database.AppDatabase;
 import yn.pam.project_pam.database.entity.Transaksi;
 
@@ -31,6 +36,11 @@ public class MainActivity extends AppCompatActivity{
 
     private AppDatabase database;
 
+    private FirebaseDatabase firebaseDatabase;
+
+    private DatabaseReference databaseReference;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +49,14 @@ public class MainActivity extends AppCompatActivity{
 //        items.clear();
 //        items.addAll(database.transaksiDao().getAll());
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new TransactionFragment())
                 .commit();
+
+        String uid = currentUser.getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String email = database.getReference("users").child(uid).;
 
 //        RecyclerView recyclerView = findViewById(R.id.rv_transactionList);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,6 +84,15 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TambahActivity.class));
+            }
+        });
+
+        Button statNavButton = findViewById(R.id.bt_statNav);
+        statNavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AnalyticsActivity.class);
+                startActivity(intent);
             }
         });
 
