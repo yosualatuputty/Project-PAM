@@ -104,8 +104,16 @@ public class TambahActivity extends AppCompatActivity {
         if (!validateForm()){
             return;
         }
+        double nominal;
+        try {
+            nominal = Double.parseDouble(amount.getText().toString());
+        } catch (NumberFormatException e) {
+            amount.setError("Invalid number");
+            return;
+        }
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (currentUser == null) {
             Toast.makeText(getApplicationContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             return;
@@ -115,25 +123,21 @@ public class TambahActivity extends AppCompatActivity {
         DatabaseReference userTransactionsRef = transactionsRef.child(userId);
         String transactionId = userTransactionsRef.push().getKey();
 
-        double nominal = Double.parseDouble(amount.getText().toString());
         String deskripsi = desc.getText().toString();
         Transaction baru = new Transaction(spinner_cat.getSelectedItem().toString(), deskripsi, nominal, spinner_wall.getSelectedItem().toString());
-
-        if (transactionId != null) {
-            userTransactionsRef.child(transactionId).setValue(baru)
-                    .addOnSuccessListener(this, new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(getApplicationContext(), "Add data",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Failed to Add data", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+        userTransactionsRef.child(transactionId).setValue(baru)
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(), "Add data",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Failed to Add data", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

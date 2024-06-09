@@ -22,8 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import yn.pam.project_pam.R;
 import yn.pam.project_pam.MainActivity;
+import yn.pam.project_pam.R;
 
 public class Auth extends AppCompatActivity {
     private EditText etEmail, etPass;

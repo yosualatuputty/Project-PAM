@@ -49,8 +49,6 @@ public class TransactionFragment extends Fragment implements Adapter.EditClickLi
 //        database = AppDatabase.getInstance(getContext());
 //        items.clear();
 //        items.addAll(database.transaksiDao().getAll());
-
-
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        adapter = new Adapter(getContext(), items, this);
