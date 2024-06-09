@@ -1,4 +1,4 @@
-package yn.pam.project_pam.adapter;
+package yn.pam.project_pam;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,10 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
 
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.model.WalletModel;
+import java.util.ArrayList;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> {
 
@@ -75,8 +74,15 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
         }
 
         public void bind(WalletModel wallet) {
-            walletImage.setImageResource(wallet.getImage());
+            String imageUrl = wallet.getImageUrl();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Picasso.get().load(imageUrl).into(walletImage);
+            } else {
+                walletImage.setImageResource(android.R.color.holo_red_dark);
+            }
             walletName.setText(wallet.getName());
         }
+
+
     }
 }

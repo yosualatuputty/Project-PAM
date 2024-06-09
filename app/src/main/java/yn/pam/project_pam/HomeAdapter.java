@@ -1,39 +1,45 @@
-package yn.pam.project_pam.adapter;
+package yn.pam.project_pam;
+
+import static android.content.ContentValues.TAG;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 
-import java.util.Iterator;
 import java.util.List;
-
-import yn.pam.project_pam.activity.EditTransactionActivity;
-import yn.pam.project_pam.HomeViewHolder;
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.Transaction;
-import yn.pam.project_pam.TransactionDatabase;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
 
     private Context context;
     private List<Transaction> transactionList;
+    private DatabaseReference mDatabase;
 
-    public HomeAdapter(Context context, List<Transaction> transactionList) {
+
+    public HomeAdapter(Context context, List<Transaction> transactionList, DatabaseReference databaseReference) {
         this.context = context;
         this.transactionList = transactionList;
+        this.mDatabase = databaseReference;
     }
+
+//        public HomeAdapter() {
+//
+//        }
 
     @NonNull
     @Override
@@ -69,8 +75,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
 
         TextView tv_dialogKategori = dialog.findViewById(R.id.tv_dialogKategori);
         TextView tv_nominalDialog = dialog.findViewById(R.id.tv_nominalDialog);
-//        TextView tv_dateDialog = dialog.findViewById(R.id.tv_dateDialog);
-//        TextView tv_timeDialog = dialog.findViewById(R.id.tv_timeDialog);
         TextView tv_walletDialog = dialog.findViewById(R.id.tv_walletDialog);
         ImageView iv_logoDialog = dialog.findViewById(R.id.iv_logoDialog);
 
@@ -92,7 +96,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
                 Intent intent = new Intent(context, EditTransactionActivity.class);
                 intent.putExtra("itemData", jsonItem);
                 context.startActivity(intent);
-
                 dialog.dismiss();
             }
         });
@@ -100,10 +103,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteTransactionFromDatabase(item.getId());
+                deleteTransaction(item.getId()); // Gunakan getKey() jika ada
                 dialog.dismiss();
             }
         });
+
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,34 +119,37 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
         dialog.show();
     }
 
-    private void deleteTransactionFromDatabase(int transactionId) {
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                TransactionDatabase db = TransactionDatabase.getInstance(context);
-                if (db != null) {
-                    db.transactionDao().deleteTransactionById(transactionId);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                Iterator<Transaction> iterator = transactionList.iterator();
-                while (iterator.hasNext()) {
-                    Transaction transaction = iterator.next();
-                    if (transaction.getId() == transactionId) {
-                        iterator.remove();
-                        break;
+    public void deleteTransaction(String transactionKey) {
+        Log.d(TAG, "Attempting to delete transaction with key: " + transactionKey);
+        DatabaseReference transactionRef = mDatabase.child(transactionKey);
+        transactionRef.removeValue()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // Menampilkan pesan jika berhasil dihapus
+                        Log.d(TAG, "Transaction deleted successfully from Firebase.");
+                        Toast.makeText(context, "Transaction deleted", Toast.LENGTH_SHORT).show();
                     }
-                }
-
-                notifyDataSetChanged();
-            }
-        };
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Menampilkan pesan jika gagal menghapus
+                        Log.d(TAG, "Failed to delete transaction from Firebase: " + e.getMessage());
+                        // Tambahkan logika sesuai kebutuhan, misalnya menampilkan pesan error, dll.
+                    }
+                });
     }
+
+//        public void updateTransactionList(Transaction updatedTransaction) {
+//            for (int i = 0; i < transactionList.size(); i++) {
+//                if (transactionList.get(i).getId().equals(updatedTransaction.getId())) {
+//                    transactionList.set(i, updatedTransaction);
+//                    notifyItemChanged(i);
+//                    break;
+//                }
+//            }
+//        }
+
 
 }

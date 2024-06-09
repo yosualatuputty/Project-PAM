@@ -13,16 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectPAM"
         tools:targetApi="31">
-        <activity
-            android:name=".EditActivity"
-            android:exported="false">
-        </activity>
+<!--        <activity-->
+<!--            android:name=".EditTransactionActivity"-->
+<!--            android:exported="false">-->
+<!--        </activity>-->
         <activity
             android:name=".DisplayTransactionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,20 +29,10 @@
             android:name=".AddTransactionActivity"
             android:label="Add Transaction">
         </activity>
-        <!--        <activity-->
-        <!--            android:name=".DisplayTransactionActivity"-->
-        <!--            android:label="Display Transaction">-->
-        <!--        </activity>-->
         <activity
             android:name=".EditTransactionActivity"
             android:label="Edit Transaction">
         </activity>
-<!--        <activity-->
-<!--            android:name=".DisplayTransactionActivity"-->
-<!--            android:label="Edit Transaction">-->
-<!--        </activity>-->
-
-
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 

@@ -1,4 +1,4 @@
-package yn.pam.project_pam.adapter;
+package yn.pam.project_pam;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.model.CategoryModel;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
@@ -89,4 +86,3 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     }
 }
-

@@ -1,47 +1,51 @@
-package yn.pam.project_pam.activity;
+package yn.pam.project_pam;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.Transaction;
-import yn.pam.project_pam.TransactionDatabase;
-import yn.pam.project_pam.adapter.HomeAdapter;
-import yn.pam.project_pam.model.WalletModel;
+
 
 public class DisplayTransactionActivity extends AppCompatActivity {
 
-    private TransactionDatabase transactionDatabase;
     private RecyclerView recyclerView;
-
-    public static List<Transaction> items = new ArrayList<Transaction>();
+    private DatabaseReference mDatabase;
+    private List<Transaction> items = new ArrayList<>();
     private static ArrayList<WalletModel> walletList;
-    private List<Transaction> previousTransactions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_transaction);
 
-        walletList = generateSampleData2();
+//        walletList = generateSampleData2();
         recyclerView = findViewById(R.id.rv_transactionList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new HomeAdapter(this, items));
+        recyclerView.setAdapter(new HomeAdapter(this, items, mDatabase));
 
-        transactionDatabase = Room.databaseBuilder(getApplicationContext(),
-                TransactionDatabase.class, "transaction-db").build();
+        mDatabase = FirebaseDatabase.getInstance().getReference("transactions");
 
         FloatingActionButton addTransaction = findViewById(R.id.addTransaction);
 
@@ -51,42 +55,32 @@ public class DisplayTransactionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         loadTransactions();
     }
 
-    public static ArrayList<WalletModel> getWalletList() {
-        return walletList;
-    }
-
-    private ArrayList<WalletModel> generateSampleData2() {
-        ArrayList<WalletModel> wallets = new ArrayList<>();
-        WalletModel.initWallet();
-        for (WalletModel wallet : WalletModel.getWalletArrayList()) {
-            wallets.add(new WalletModel(wallet.getId(), wallet.getName()));
-        }
-        return wallets;
-    }
-
     private void loadTransactions() {
-        new AsyncTask<Void, Void, List<Transaction>>() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            protected List<Transaction> doInBackground(Void... voids) {
-                return transactionDatabase.transactionDao().getAllTransactions();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                items.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Transaction transaction = snapshot.getValue(Transaction.class);
+                    items.add(transaction);
+                }
+                displayTransactions(items);
             }
 
             @Override
-            protected void onPostExecute(List<Transaction> transactions) {
-                super.onPostExecute(transactions);
-                items = transactions; // Set items ke data yang baru
-                displayTransactions(transactions);
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-        }.execute();
+        });
     }
-
-
 
     public void displayTransactions(List<Transaction> transactions) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new HomeAdapter(this, transactions));
+        recyclerView.setAdapter(new HomeAdapter(this, transactions, mDatabase));
     }
+
 }

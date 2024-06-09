@@ -1,25 +1,21 @@
-package yn.pam.project_pam.model;
-
-import java.util.ArrayList;
-
-import yn.pam.project_pam.R;
+package yn.pam.project_pam;
 
 public class WalletModel {
-
-    private static ArrayList<WalletModel> walletArrayList = new ArrayList<>();
-    private String id;
+    private int id;
     private String name;
+    private String image_url;
 
-    public WalletModel(String id, String name){
+    public WalletModel(int id, String name, String image_url){
         this.id = id;
         this.name = name;
+        this.image_url = image_url;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,36 +27,11 @@ public class WalletModel {
         this.name = name;
     }
 
-    public static void initWallet() {
-        WalletModel wallet1 = new WalletModel("0", "Mandiri");
-        walletArrayList.add(wallet1);
-
-        WalletModel wallet2 = new WalletModel("1", "Cash");
-        walletArrayList.add(wallet2);
-
-        WalletModel wallet3 = new WalletModel("2", "Dana");
-        walletArrayList.add(wallet3);
-
-        WalletModel wallet4 = new WalletModel("3", "Shopeepay");
-        walletArrayList.add(wallet4);
+    public String getImageUrl() {
+        return image_url;
     }
 
-    public int getImage() {
-        switch (getId()) {
-            case "0":
-                return R.drawable.ic_bank;
-            case "1":
-                return R.drawable.ic_cash;
-            case "2":
-            case "3":
-                return R.drawable.ic_e_money;
-            default:
-                return 0;
-        }
-
-    }
-
-    public static ArrayList<WalletModel> getWalletArrayList() {
-        return walletArrayList;
+    public void setImageUrl(String image_url) {
+        this.image_url = image_url;
     }
 }

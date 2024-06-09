@@ -3,17 +3,23 @@ package yn.pam.project_pam;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Entity(tableName = "transactions")
 public class Transaction {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private String id;
     private String category;
     private String wallet;
     private String amount;
     private String description;
     private int logo;
 
-    public Transaction(String category, String wallet, String amount, String description, int logo) {
+    public Transaction(){}
+
+    public Transaction(String id,String category, String wallet, String amount, String description, int logo) {
+        this.id = id;
         this.category = category;
         this.wallet = wallet;
         this.amount = amount;
@@ -21,11 +27,11 @@ public class Transaction {
         this.logo = logo;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,6 +73,17 @@ public class Transaction {
 
     public void setLogo(int logo) {
         this.logo = logo;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("category", category);
+        result.put("wallet", wallet);
+        result.put("amount", amount);
+        result.put("description", description);
+        result.put("logo", logo);
+        return result;
     }
 
 }

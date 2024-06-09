@@ -1,9 +1,7 @@
-package yn.pam.project_pam.activity;
+package yn.pam.project_pam;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,18 +13,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-
-import yn.pam.project_pam.CategoryLoader;
-import yn.pam.project_pam.R;
-import yn.pam.project_pam.Transaction;
-import yn.pam.project_pam.TransactionDatabase;
-import yn.pam.project_pam.adapter.CategoryAdapter;
-import yn.pam.project_pam.adapter.WalletAdapter;
-import yn.pam.project_pam.model.CategoryModel;
-import yn.pam.project_pam.model.WalletModel;
 
 public class AddTransactionActivity extends AppCompatActivity {
 
@@ -44,13 +35,13 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView walletTextView;
     private RelativeLayout walletDropdown;
     private ImageView closeIcon;
+    private DatabaseReference mDatabase;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
-        TransactionDatabase transactionDatabase = Room.databaseBuilder(getApplicationContext(),
-                TransactionDatabase.class, "transaction-db").build();
+        mDatabase = FirebaseDatabase.getInstance().getReference("transactions");
 
         categoryTextView = findViewById(R.id.tv_category_dropdown);
         categoryDropdown = findViewById(R.id.category_dropdown_container);
@@ -83,14 +74,23 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
         });
 
-        walletList = DisplayTransactionActivity.getWalletList();
         walletAdapter = new WalletAdapter(getApplicationContext(), walletList, walletTextView, walletDropdown);
         walletRecycleView.setLayoutManager(new LinearLayoutManager(this));
         walletRecycleView.setAdapter(walletAdapter);
         walletTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                walletDropdown.setVisibility(View.VISIBLE);
+                new WalletLoader() {
+                    @Override
+                    protected void onPostExecute(ArrayList<WalletModel> result) {
+                        super.onPostExecute(result);
+                        walletList = result;
+                        walletAdapter = new WalletAdapter(getApplicationContext(), walletList, walletTextView, walletDropdown);
+                        walletRecycleView.setAdapter(walletAdapter);
+                        walletDropdown.setVisibility(View.VISIBLE);
+                    }
+                }.execute();
+
             }
         });
 
@@ -132,33 +132,29 @@ public class AddTransactionActivity extends AppCompatActivity {
                 } else {
                     logo = R.drawable.ic_food;
                 }
+                String id = mDatabase.push().getKey();
                 String wallet = walletTextView.getText().toString().trim();
                 String amount = amountEditText.getText().toString().trim();
                 String description = descriptionEditText.getText().toString().trim();
 
-                Toast.makeText(AddTransactionActivity.this, "Button Continue diklik", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTransactionActivity.this, "Transaction added", Toast.LENGTH_SHORT).show();
 
-                int finalLogo = logo;
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        Log.d("AddTransaction", "doInBackground: Saving transaction to database");
-                        Transaction transaction = new Transaction(category, wallet, amount, description, finalLogo);
-                        transactionDatabase.transactionDao().insert(transaction);
-                        return null;
-                    }
+                if (!category.isEmpty() && !wallet.isEmpty() && !amount.isEmpty() && !description.isEmpty()) {
+                    addTransaction(id, category, wallet, amount, description, logo);
+                    Toast.makeText(AddTransactionActivity.this, "Transaction added", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AddTransactionActivity.this, DisplayTransactionActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(AddTransactionActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        super.onPostExecute(aVoid);
-                        Log.d("AddTransaction", "onPostExecute: Transaction saved, starting DisplayTransactionActivity");
-                        Intent intent = new Intent(AddTransactionActivity.this, DisplayTransactionActivity.class);
-                        startActivity(intent);
-                    }
-                }.execute();
             }
         });
         getClassLoader();
     }
 
+    private void addTransaction(String id, String category, String wallet, String amount, String description, int logo) {
+        Transaction transaction = new Transaction(id, category, wallet, amount, description, logo);
+        mDatabase.child(id).setValue(transaction); // Menggunakan kunci yang sama untuk menyimpan data
+    }
 }

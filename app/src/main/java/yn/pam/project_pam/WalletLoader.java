@@ -13,13 +13,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CategoryLoader extends AsyncTask<Void, Void, ArrayList<CategoryModel>> {
+public class WalletLoader extends AsyncTask<Void, Void, ArrayList<WalletModel>> {
 
-    private static final String SERVER_URL = "http://192.168.56.1/server-fundplus/categories.php";
+    private static final String SERVER_URL = "http://192.168.56.1/server-fundplus/wallets.php";
 
     @Override
-    protected ArrayList<CategoryModel> doInBackground(Void... voids) {
-        ArrayList<CategoryModel> categoryList = new ArrayList<>();
+    protected ArrayList<WalletModel> doInBackground(Void... voids) {
+        ArrayList<WalletModel> walletList = new ArrayList<>();
 
         try {
             URL url = new URL(SERVER_URL);
@@ -40,8 +40,8 @@ public class CategoryLoader extends AsyncTask<Void, Void, ArrayList<CategoryMode
 
                 String json = stringBuilder.toString();
                 Gson gson = new Gson();
-                CategoryModel[] categories = gson.fromJson(json, CategoryModel[].class);
-                categoryList.addAll(Arrays.asList(categories));
+                WalletModel[] wallets = gson.fromJson(json, WalletModel[].class);
+                walletList.addAll(Arrays.asList(wallets));
 
                 bufferedReader.close();
                 inputStream.close();
@@ -52,6 +52,7 @@ public class CategoryLoader extends AsyncTask<Void, Void, ArrayList<CategoryMode
             e.printStackTrace();
         }
 
-        return categoryList;
+        return walletList;
     }
 }
+

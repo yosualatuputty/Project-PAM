@@ -1,4 +1,4 @@
-package yn.pam.project_pam.model;
+package yn.pam.project_pam;
 
 public class CategoryModel {
     private int id;
