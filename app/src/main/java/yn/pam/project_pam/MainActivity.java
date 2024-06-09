@@ -53,10 +53,7 @@ public class MainActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new TransactionFragment())
                 .commit();
-
-        String uid = currentUser.getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String email = database.getReference("users").child(uid).;
+        
 
 //        RecyclerView recyclerView = findViewById(R.id.rv_transactionList);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
